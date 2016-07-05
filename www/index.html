@@ -25,7 +25,8 @@
 <ion-pane>
   <ion-header-bar class="bar-positive">
     <div class="buttons">
-      <button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
+      <button class="button button-icon icon ion-ios-minus-outline"
+              ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
     </div>
     <h1 class="title" ng-click="getTasks()">Todo</h1>
 
@@ -36,17 +37,25 @@
       <button class="button button-icon" ng-click="openTaskFormModal()">
         <i class="icon ion-compose"></i>
       </button>
-
     </div>
   </ion-header-bar>
   <ion-content on-swipe-down="getTasks()">
     <ion-list show-delete="data.showDelete" show-option-button="1">
-      <ion-item ng-repeat="task in tasks">
-        <div class="pointer" ng-bind="task.title" ng-click="showTaskModal(task.id)"></div>
+      <ion-item ng-repeat="task in tasks" class="item-icon-right">
+        <div class="pointer task-in-list" ng-bind="task.title" ng-click="showTaskModal(task.id)"></div>
+        <i class="icon item-toggle">
+          <label class="toggle toggle-balanced">
+            <input type="checkbox" ng-bind="task.completed" ng-model="taskStatus[task.id]"
+                   ng-click="completeTask(task.id)" ng-true-value="1" ng-false-value="0">
+
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </i>
         <ion-delete-button class="ion-minus-circled" ng-click="confirmRemove(task.id)">
         </ion-delete-button>
-        <ion-option-button class="button-assertive" ng-click="editTask(task.id)">
-          Edit
+        <ion-option-button class="ion-edit assertive" ng-click="editTask(task.id)">
         </ion-option-button>
       </ion-item>
     </ion-list>
@@ -67,7 +76,8 @@
           <strong> <span ng-bind="task.title"></span></strong>
           <span class="item-toggle">
           <label class="toggle toggle-balanced">
-            <input type="checkbox" ng-model="task.completed" ng-click="completeTask(task.id)" ng-true-value="1" ng-false-value="0">
+            <input type="checkbox" ng-model="task.completed" ng-click="completeTask(task.id)" ng-true-value="1"
+                   ng-false-value="0">
 
             <div class="track">
               <div class="handle"></div>
@@ -79,10 +89,13 @@
           {{task.description}}
         </div>
       </div>
-      <div class="buttons item-delete">
-        <button title="Delete?" class="button button-icon icon ion-minus-circled ion-ios-minus-outline"  ng-click="confirmRemove(task.id,true)"> </button>
-      </div>
     </ion-content>
+    <ion-footer-bar>
+      <button class="button button-block button-assertive" ng-click="confirmRemove(task.id,true)">
+        Delete
+      </button>
+    </ion-footer-bar>
+
   </ion-modal-view>
 </script>
 <script id="task-form-modal.html" type="text/ng-template">
@@ -114,7 +127,9 @@
               </label>
             </li>
           </ul>
-          <button type="submit" class="button button-block button-positive" ng-disabled="taskForm.$invalid">{{modalButton}}</button>
+          <button type="submit" class="button button-block button-positive" ng-disabled="taskForm.$invalid">
+            {{modalButton}}
+          </button>
         </div>
       </form>
     </ion-content>
@@ -129,10 +144,10 @@
           <i class="icon ion-search placeholder-icon"></i>
           <input type="text" placeholder="Search" ng-change="filterTasks(query)" ng-model="query">
         </label>
-        <a class="item pointer" ng-click="filterTasks(null, {completed: 1})" >
+        <a class="item pointer" ng-click="filterTasks(null, {completed: 1})">
           <i class="icon ion-checkmark-round balanced"></i> Completed
         </a>
-        <a class="item pointer"  ng-click="filterTasks(null, {completed: 0})" >
+        <a class="item pointer" ng-click="filterTasks(null, {completed: 0})">
           <i class="icon ion-code-working"></i> Not Completed
         </a>
       </div>

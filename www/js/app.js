@@ -27,7 +27,7 @@ app.controller('task', function ($scope, $ionicModal, $ionicPopup, $ionicPopover
   $scope.search = '';
   $scope.task = {};
   $scope.fTask = {};
-  $scope.taskStatus = '';
+  $scope.taskStatus = [];
 
   $ionicModal.fromTemplateUrl('task-form-modal.html', {
     scope: $scope,
@@ -50,10 +50,11 @@ app.controller('task', function ($scope, $ionicModal, $ionicPopup, $ionicPopover
   };
 
   $scope.createTask = function () {
-    Task.add($scope.fTask);
-    $scope.getTasks();
-    $scope.taskFormModal.hide();
-    $scope.fTask = {};
+    Task.add($scope.fTask).then(function (task) {
+      $scope.getTasks();
+      $scope.taskFormModal.hide();
+      $scope.fTask = {};
+    });
   };
 
   $scope.confirmRemove = function (taskId, closeModal) {
@@ -97,9 +98,10 @@ app.controller('task', function ($scope, $ionicModal, $ionicPopup, $ionicPopover
   };
 
   $scope.completeTask = function (taskId) {
-    Task.update(taskId, $scope.task).then(function (task) {
-      Task.get(taskId).then(function (task) {
-        $scope.task = task;
+    Task.get(taskId).then(function (task) {
+      task.completed = $scope.taskStatus[taskId];
+      Task.update(taskId, task).then(function (task) {
+        $scope.getTasks();
       });
     });
   };

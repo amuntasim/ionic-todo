@@ -11,6 +11,7 @@ angular.module('todo.services', [])
             q.resolve(result);
           }, function (error) {
             console.warn(error);
+            console.log(error);
             q.reject(error);
           });
       });
